@@ -15,6 +15,10 @@ public class UsuarioRepository {
     public UsuarioRepository() {
     }
 
+    public Map<String, Usuario> findAll() {
+        return lists;
+    }
+
     public Usuario findUser(String nome) {
         return lists.get(nome);
     }

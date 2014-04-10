@@ -30,7 +30,69 @@ function init(user) {
     };
     output = document.getElementById("output");
 }
+function filtro(acao) {
+    var txt = inputfiltro.value;
+    console.log(acao);
+    console.log(txt);
+    $.ajax({
+        type: "POST",
+        url: "./filtro",
+        data: {txt: txt, filtro: acao},
+        success: function(result) {
 
+            console.log((result));
+            var html = ''
+            var dialog='';
+            if (result.length > 0) {
+                $.each(result, function(key, value) {
+                    var usuarioId = replaceAll(value.toLowerCase().trim(), " ", "_");
+                    if (value.trim() != name.trim()) {
+                        dialog += '<div id="dialog' + usuarioId + '"  title="Chat - ' + value + '" >'
+                                + '<div class="panel panel-default" style="width: 370px">'
+                                + '<div class="panel-heading">'
+                                + '<a href="#"  data-toggle="modal" onclick="infUser(\'' + value.trim() + '\')" data-target="#modal-info"><span class="glyphicon glyphicon-info-sign"></span> Informações</a>'
+                                + '</div>'
+                                + '<div class="panel-body" id="painel' + usuarioId + '" style="height: 200px;overflow-y: scroll">'
+                                + '</div>'
+                                + '<div class="panel-footer">'
+                                + '<div class="row">'
+                                + '<div class="col-xs-10">'
+                                + '<textarea class="form-control" rows="3" id="fieldText' + usuarioId + '" style="resize: none;width: 250px"></textarea>'
+                                + '</div>'
+                                + '<div class="col-xs-2">'
+                                + '<p><button type="button" class="btn btn-primary btn-lg" onclick="send_message(\'' + value.trim() + '\')" style="float: right">Enviar</button></p>'
+                                + '<p><button type="button" class="btn btn-default btn-lg"  onclick="sair(\'' + name.trim() + '\',\'' + value.trim() + '\');" style="float: right;margin-top: 5px;width: 78px;">Sair</button></p>'
+                                + '</div>'
+                                + '</div>'
+                                + '</div>'
+                                + '</div>'
+                                + '</div>';
+
+
+                        html += '<p><div class="dropdown">'
+                                + '<a data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> ' + value.trim() + '</a>'
+                                + '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" >'
+                                + '<p style="margin-left: 5px"><a href="#" class="conversa" onclick="$(\'#dialog' + usuarioId + '\').dialog(\'open\');$(\'#dialog' + usuarioId + '\').dialog({width: 405});" ><span class="glyphicon glyphicon-phone"></span> Iniciar Conversa</a></p>'
+                                + '<p style="margin-left: 5px"><a href="#"  data-toggle="modal" onclick="infUser(\'' + value.trim() + '\')" data-target="#modal-info"><span class="glyphicon glyphicon-info-sign"></span> Informações</a></p>'
+                                + '</ul></div></p>';
+                    }
+                });
+                userTab.innerHTML = html;
+                dialogsUser.innerHTML = dialog;
+                $.each(result, function(key, value) {
+                    var usuarioId = replaceAll(value.toLowerCase().trim(), " ", "_");
+                    $("#dialog" + usuarioId).dialog({autoOpen: false});
+                });
+            } else {
+                html = '<p><div class="dropdown">Nenhum registro encontrado</p></div>';
+                userTab.innerHTML = html;
+            }
+        },
+        error: function(data) {
+            alert("data.code");
+        }
+    });
+}
 
 function join() {
     frase = textFrase.value;
@@ -49,7 +111,7 @@ function join() {
                 });
                 historico.innerHTML = html;
 
-                titulo.innerHTML = "<div style='border-radius:50%;-moz-border-radius:50%;-webkit-border-radius:50%;'></div>" + name + " esta online! </br> " + frase;
+                titulo.innerHTML = "<div style='border-radius:50%;-moz-border-radius:50%;-webkit-border-radius:50%;'></div>" + name + " - esta online! </br> " + frase;
                 $('#bt_cadastrar').hide();
                 $('#tabs').show();
                 init(name);
