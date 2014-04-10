@@ -4,7 +4,6 @@ package br.com.webchat.repository.usuario;
 
 import br.com.webchat.model.Usuario;
 import java.util.List;
-import javax.ejb.Remote;
 
 public interface Repository {
 

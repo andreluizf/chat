@@ -5,7 +5,6 @@
  */
 package br.com.chat.web.controller;
 
-import br.com.webchat.model.Message;
 import br.com.webchat.model.Usuario;
 import br.com.webchat.repository.message.MessageImpl;
 import br.com.webchat.repository.usuario.UsuarioImpl;

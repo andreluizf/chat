@@ -32,15 +32,11 @@ function init(user) {
 }
 function filtro(acao) {
     var txt = inputfiltro.value;
-    console.log(acao);
-    console.log(txt);
     $.ajax({
         type: "POST",
         url: "./filtro",
         data: {txt: txt, filtro: acao},
         success: function(result) {
-
-            console.log((result));
             var html = ''
             var dialog='';
             if (result.length > 0) {
@@ -155,8 +151,6 @@ function sair(from, to) {
         url: "./mensagem",
         data: {fromNome: from, toNome: to, msg: $('#painel' + toId).html()},
         success: function(result) {
-
-            console.log((result));
             var html = ''
             $.each(result, function(key, value) {
                 html += '<p><span class="glyphicon glyphicon-user"></span> ' + value + '</p>';
@@ -168,10 +162,6 @@ function sair(from, to) {
             alert("data.code");
         }
     });
-    console.log(from);
-    console.log(to);
-
-    console.log($('#painel' + toId).html());
     $('#dialog' + toId).dialog('close');
 }
 function infUser(name) {
@@ -181,9 +171,6 @@ function infUser(name) {
         url: "./informacao",
         data: {nome: name},
         success: function(result) {
-
-            console.log(result['data']);
-            console.log(result);
             $("#dialogInf").dialog("open");
             infNome.innerHTML = (result['nome']) ? result['nome'] : "";
             infApelido.innerHTML = (result['apelido']) ? result['apelido'] : "";

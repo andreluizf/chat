@@ -4,7 +4,6 @@ import br.com.webchat.model.Usuario;
 import br.com.webchat.repository.usuario.UsuarioRepository;
 import com.google.gson.Gson;
 import java.io.IOException;
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

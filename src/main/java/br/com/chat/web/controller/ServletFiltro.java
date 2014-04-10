@@ -42,7 +42,6 @@ public class ServletFiltro extends HttpServlet {
                 lists = filtroHelper.filtroCidade(txt);
                 break;
         }
-        System.out.println(lists.size());
         String json = new Gson().toJson(lists);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
