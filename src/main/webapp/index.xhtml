@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css"/>
+        <script src="js/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery-ui-1.10.4.custom.js"></script>
+        <script src="js/websocket.js"></script>
+
+    </h:head>
+    <h:body>
+        <!-- diaglo -->
+        <div id="cadastro" title="Cadastro de Usuário">
+            <form method="POST" action="/ChatWeb" > 
+                <div class="panel panel-default">
+                    <div class="panel-body" >
+
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input type="text"  class="form-control"      id="textNome" />
+
+                        </div>
+                        <div class="form-group">
+                            <label for="apelido">Apelido</label>
+                            <input type="text" class="form-control"  id="textApelido"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control"  id="textEmail"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="data">Data Nascimento</label>
+                            <input type="text"  class="form-control"   id="textData" />
+
+                        </div>
+                        <div class="form-group">
+                            <label for="cidade">Cidade</label>
+                            <input type="text"  class="form-control"  id="textCidade" />
+                        </div>
+                        <div class="form-group">
+                            <label for="frase">Frase</label>
+                            <input type="text" class="form-control"  id="textFrase" />
+                        </div>
+
+
+                    </div>
+                    <div class="panel-footer">
+                        <button type="button"  onclick="$('#cadastro').dialog('close')" class="btn btn-default">Cancelar</button>
+                        <button  type="button" onclick="join();
+                                $('#cadastro').dialog('close')" class="btn btn-primary"  >Enviar</button>
+
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="aviso" title="Aviso">
+            <div class="alert alert-danger">
+                <p>Existe um outro usuário ja conectado com este nome!</p>
+            </div>
+            <div class="alert alert-danger">
+                <p>Cadastre outro nome para conectar.</p>
+            </div>
+            <button type="button"  onclick="$('#aviso').dialog('close')" class="btn btn-default" style="float: right">OK</button>
+        </div>
+        <div id="dialogInf" title="Perfil" >
+
+            <div class="panel panel-default">
+                <div class="panel-body" >
+
+                    <div class="form-group">
+                        <div >Nome: <span id="infNome"></span></div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <div >Apelido: <span id="infApelido"></span></div>
+
+                    </div>
+                    <div class="form-group">
+                        <div >Email:   <span id="infEmail" > </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div >Data Nascimento :<span id="infData"></span></div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <div >Cidade:<span id="infCidade"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <div >Frase: <span id="infFrase"></span></div>
+
+                    </div>
+
+
+                </div>
+                <div class="panel-footer">
+                    <button type="button"  onclick="$('#dialogInf').dialog('close')" class="btn btn-default">Sair</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container" align="left">
+            <div class="container " align="right" >
+                <button type="button" class="btn btn-primary btn-lg" id="bt_cadastrar" onclick="$('#cadastro').dialog('open');">
+                    <span class="glyphicon glyphicon-inbox"></span> Cadastro
+                </button>
+            </div>
+            <div id="tabs" style="display: none">
+
+                <ul>
+                    <li><a href="#tabs1" id="titulo" >Usuário</a></li>
+                </ul>
+                <div id="tabs1" style="min-height: 300px; ">
+                    <div id="userTab" style="float: left;width: 70% "></div>
+                    <div id="userHistorico" style="float: right; width:  30%;">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Histórico - ultimas conversas</div>
+                            <div class="panel-body">
+                                <div id="historico" style="max-height: 400px;overflow-y: scroll"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- diaglo -->
+                <div id="dialogsUser">
+
+                </div>
+                <div id="dialogsInf">
+
+                </div>
+            </div>
+        </div>
+        <script>
+
+            $('document').ready(function() {
+                $("#tabs").tabs();
+                $("#textData").datepicker({changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+                $("#dialogInf").dialog({autoOpen: false});
+                $("#cadastro").dialog({autoOpen: false});
+                $('#aviso').dialog({autoOpen: false});
+
+
+            })
+
+
+        </script>
+
+    </h:body>
+</html>
+
