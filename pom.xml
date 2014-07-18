@@ -96,7 +96,7 @@
 			</plugin>
 
 		</plugins>
-		<finalName>CAX</finalName>
+		<finalName>chat</finalName>
 	</build>
 
 </project>
